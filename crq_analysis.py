@@ -26,10 +26,10 @@ def main(argv):
         print("Usage: python3 yourfile.py -i <inputfile> -o <outputfile>")
         return
     else:
-        print("-----------------------")
-        print("Análisis de Incidentes")
-        print("-----------------------", "\n\n")
-        ready = input("No olvides marcar la Col P, ir a Format-Cells-Alignment y marcar Wrap text. Pulsá 1 y <ENTER> para continuar: ")
+        print("-------------------")
+        print("Análisis de Cambios")
+        print("-------------------", "\n\n")
+        ready = input("Si está todo listo, pulsá 1 y <ENTER> para continuar: ")
         if ready == "1":
             print("\nProcesando ... esto puede demorar varias horas ...")
             workbook = load_workbook(filename=inputfile)
@@ -46,11 +46,11 @@ def main(argv):
             except Exception as e:
                 print(e)
 
-            if sheet["R1"].value == None and sheet["S1"].value == None and sheet["T1"].value == None and sheet["U1"].value == None:
-                sheet["R1"] = "Res_Server_Name"
-                sheet["S1"] = "Res_Word_Match"
-                sheet["T1"] = "Det_Server_Name"
-                sheet["U1"] = "Det_Word_Match"
+            if sheet["CP1"].value == None and sheet["CQ1"].value == None and sheet["CR1"].value == None and sheet["CS1"].value == None:
+                sheet["CP1"] = "Res_Server_Name"
+                sheet["CQ1"] = "Res_Word_Match"
+                sheet["CR1"] = "Det_Server_Name"
+                sheet["CS1"] = "Det_Word_Match"
                 try:
                     workbook.save(filename=outputfile)
                 except Exception as e:
@@ -62,8 +62,8 @@ def main(argv):
                         value[0], server_names, scorer=fuzz.partial_ratio)
                     percent = result[1]
                     if percent > 80: #and sheet["R" + str(res_counter)].value != None and sheet["S" + str(res_counter)].value == None:
-                        sheet["R" + str(res_counter)] = result[0]
-                        sheet["S" + str(res_counter)] = result[1]
+                        sheet["CP" + str(res_counter)] = result[0]
+                        sheet["CQ" + str(res_counter)] = result[1]
                         try:
                             workbook.save(filename=outputfile)
                         except Exception as e:
@@ -78,8 +78,8 @@ def main(argv):
                         value[0], server_names, scorer=fuzz.partial_ratio)
                     percent = result[1]
                     if percent > 80: #and sheet["T" + str(det_counter)].value == None and sheet["U" + str(det_counter)].value == None:
-                        sheet["T" + str(det_counter)] = result[0]
-                        sheet["U" + str(det_counter)] = result[1]
+                        sheet["CR" + str(det_counter)] = result[0]
+                        sheet["CS" + str(det_counter)] = result[1]
                         try:
                             workbook.save(filename=outputfile)
                         except Exception as e:
@@ -98,8 +98,8 @@ def main(argv):
                                             end_value=100,
                                             end_color="0000FF00")
 
-            sheet.conditional_formatting.add("S2:S35000", color_scale_rule)
-            sheet.conditional_formatting.add("U2:U35000", color_scale_rule)
+            sheet.conditional_formatting.add("CQ2:CQ35000", color_scale_rule)
+            sheet.conditional_formatting.add("CS2:CS35000", color_scale_rule)
             workbook.save(filename=outputfile)
         else:
             print("Opción no válida")
